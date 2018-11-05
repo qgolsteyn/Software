@@ -21,7 +21,8 @@
             "RENDERER/*": ["src/renderer/*"],
             "MAIN/*": ["src/main/*"],
             "SHARED/*": ["src/shared/*"]
-        }
+        },
+        "typeRoots": ["./node_modules/@types", "./typings"]
     },
     "exclude": [
         "config",
