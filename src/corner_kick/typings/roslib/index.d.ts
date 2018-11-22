@@ -10,8 +10,16 @@ declare module 'roslib' {
         url: string;
     }
 
-    interface Anything {
-        [key: string]: any;
+    interface ServiceRequestOptions {
+        name: string;
+        [key: string]: any; //Representing values
+    }
+
+    /* ROSLIB.Message object dependent on message (presumably found in thunderbots_msgs) */
+    /* How do we account for any number of parameters from messages? */
+
+    interface Message {
+        [key: string]: any; 
     }
 
     interface ParamOptions {
@@ -46,14 +54,19 @@ declare module 'roslib' {
     // Message //
 
     class Message {
-        constructor(values: Anything);
+        constructor(values: Message);
     }
 
     // Param //
 
     class Param {
         constructor(options: ParamOptions);
-        delete(callback: (response: string) => void): void; //What does callback take in
+        delete(callback: (response: string) => void): void; //What does callback take in?
+        get(callback: (value: string) => void): void;
+        set(
+            value: any,
+            callback: (response: string) => void, //What does callback take in?
+        ): void;
     }
 
     // ROS //
@@ -69,7 +82,7 @@ declare module 'roslib' {
             level: string,
             end: number,
         ): void;
-        callOnConnection(message: any): void;
+        callOnConnection(message: Message): void;
         close(): void;
         connect(url: string): void;
         decodeTypeDefs(defs: string[]): void;
@@ -159,7 +172,7 @@ declare module 'roslib' {
     // ServiceRequest //
     
     class ServiceRequest {
-        constructor(values: any);
+        constructor(values: ServiceRequestOptions);
     }
 
     // ServiceResponse //
