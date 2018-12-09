@@ -4,24 +4,21 @@
  */
 
 declare module 'react-panelgroup' {
-    
-    interface PanelWidthObject {
-        size: number,
-        minSize: number,
-        resize: "fixed" | "dynamic" | "stretch",
+    export interface PanelWidth {
+        size?: number,
+        minSize?: number,
+        resize?: "fixed" | "dynamic" | "stretch",
         snap?: string[],
     }
     
-    export interface PanelGroupProps {
-        spacing: number,
+    interface PanelGroupProps {
+        spacing?: number,
         borderColor?: string,
         panelColor?: string,
-        direction: "row" | "column",
-        panelWidths?: PanelWidthObject[],
-        onUpdate(): PanelWidthObject;
+        direction?: "row" | "column",
+        panelWidths?: Array<PanelWidth|null>,
+        onUpdate?: (data: PanelWidth) => void;
     }
 
-
-    let PanelGroup: React.ComponentClass<PanelGroupProps>;
-    export default PanelGroup;
+    export default class PanelGroup extends React.Component<PanelGroupProps, any> {}
 }

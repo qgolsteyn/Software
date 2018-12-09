@@ -4,7 +4,7 @@
  */
 
 import * as React from 'react';
-import PanelGroup from 'react-panelgroup';
+import PanelGroup, {PanelWidth} from 'react-panelgroup';
 import { Container, Subscribe } from 'unstated';
 
 import { Persist } from 'RENDERER/components/containers/Persist';
@@ -42,7 +42,7 @@ export const PaneLayout = (props: IPaneLayoutProps) => (
  * @param paneDimen a dimension object persisted between application run
  */
 const mapPaneLayout = (props: IPaneLayoutProps, paneDimen: any) => {
-    const horizontalWidths = paneDimen.state.horizontal || [
+    const horizontalWidths: PanelWidth[] = paneDimen.state.horizontal || [
         { resize: 'stretch' },
         { size: DEFAULT_PANE_HEIGHT, resize: 'dynamic' },
     ];
@@ -52,7 +52,7 @@ const mapPaneLayout = (props: IPaneLayoutProps, paneDimen: any) => {
             direction="column"
             borderColor="grey"
             panelWidths={horizontalWidths}
-            onUpdate={(data: any) => paneDimen.set({ horizontal: data })}
+            onUpdate={(data) => paneDimen.set({ horizontal: data })}
         >
             {props.top}
             {props.bottom}
