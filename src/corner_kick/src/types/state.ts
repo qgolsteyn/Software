@@ -3,6 +3,7 @@
  */
 
 import { Setting } from './settings';
+import { ILayer } from './visualizer';
 
 /**
  * The application state
@@ -10,6 +11,7 @@ import { Setting } from './settings';
 export interface IRootState {
     ros: IROSState;
     settings: ISettingsState;
+    visualizer: IVisualizerState;
 }
 
 /**
@@ -28,3 +30,11 @@ export interface IROSState {
  * The state object for settings
  */
 export type ISettingsState = { [K in Setting]: string };
+
+/**
+ * The state object for the visualizer
+ */
+export interface IVisualizerState {
+    layerOrder: string[];
+    layers: { [K: string]: ILayer };
+}

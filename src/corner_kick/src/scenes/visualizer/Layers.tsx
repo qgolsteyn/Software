@@ -48,10 +48,11 @@ const LayerItem = styled.div`
 
 interface ILayersProps {
     layers: ILayer[];
+    onVisibilityChanged: (layer: ILayer) => void;
 }
 
 export const Layers = (props: ILayersProps) => {
-    const { layers } = props;
+    const { layers, onVisibilityChanged } = props;
     return (
         <>
             {layers.map((layer) => (
@@ -60,7 +61,12 @@ export const Layers = (props: ILayersProps) => {
                     className={layer.visible ? 'visible' : 'hidden'}
                 >
                     {layer.name}
-                    <i className="material-icons">remove_red_eye</i>
+                    <i
+                        className="material-icons"
+                        onClick={() => onVisibilityChanged(layer)}
+                    >
+                        remove_red_eye
+                    </i>
                 </LayerItem>
             ))}
         </>

@@ -5,5 +5,5 @@
 export { IThemeProvider } from './theme';
 export { Setting } from './settings';
 export { IRosoutMessage } from './standardROSMessages';
-export { IRootState, IROSState, ISettingsState } from './state';
+export { IRootState, IROSState, ISettingsState, IVisualizerState } from './state';
 export { ILayer } from './visualizer';

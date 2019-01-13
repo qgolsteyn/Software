@@ -6,6 +6,7 @@ import { combineReducers } from 'redux';
 
 import rosReducer from './ros';
 import settingsReducer from './settings';
+import visualizerReducer from './visualizer';
 
 /**
  * Combines all reducers. This is what the Redux accepts when being
@@ -14,4 +15,5 @@ import settingsReducer from './settings';
 export default combineReducers({
     ros: rosReducer,
     settings: settingsReducer,
+    visualizer: visualizerReducer,
 });
