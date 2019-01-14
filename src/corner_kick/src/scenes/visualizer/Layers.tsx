@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Reorder from 'react-reorder';
 
 import { ILayer } from 'SRC/types';
 import styled from 'SRC/utils/styled-components';
@@ -17,6 +18,10 @@ const LayerItem = styled.div`
 
     cursor: pointer;
 
+    &.dragged {
+        background: ${(props) => props.theme.colors.selected};
+    }
+
     & .material-icons {
         padding: 4px;
         margin-left: auto;
@@ -32,7 +37,7 @@ const LayerItem = styled.div`
         background: ${(props) => props.theme.colors.bg};
     }
 
-    &:hover {
+    &:not(.placeholder):hover {
         background: ${(props) => props.theme.colors.selected};
         color: ${(props) => props.theme.colors.fg};
     }
@@ -49,26 +54,37 @@ const LayerItem = styled.div`
 interface ILayersProps {
     layers: ILayer[];
     onVisibilityChanged: (layer: ILayer) => void;
+    onOrderChanged: (prevIndex: number, newIndex: number) => void;
 }
 
 export const Layers = (props: ILayersProps) => {
-    const { layers, onVisibilityChanged } = props;
+    const { layers, onOrderChanged, onVisibilityChanged } = props;
     return (
         <>
-            {layers.map((layer) => (
-                <LayerItem
-                    key={layer.topic}
-                    className={layer.visible ? 'visible' : 'hidden'}
-                >
-                    {layer.name}
-                    <i
-                        className="material-icons"
-                        onClick={() => onVisibilityChanged(layer)}
+            <Reorder
+                reorderId="layers"
+                placeholder={<LayerItem />}
+                draggedClassName="dragged"
+                placeholderClassName="placeholder"
+                onReorder={(_event: any, previousIndex: number, nextIndex: number) =>
+                    onOrderChanged(previousIndex, nextIndex)
+                }
+            >
+                {layers.map((layer) => (
+                    <LayerItem
+                        key={layer.topic}
+                        className={layer.visible ? 'visible' : 'hidden'}
                     >
-                        remove_red_eye
-                    </i>
-                </LayerItem>
-            ))}
+                        {layer.name}
+                        <i
+                            className="material-icons"
+                            onClick={() => onVisibilityChanged(layer)}
+                        >
+                            remove_red_eye
+                        </i>
+                    </LayerItem>
+                ))}
+            </Reorder>
         </>
     );
 };

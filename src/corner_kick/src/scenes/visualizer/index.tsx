@@ -19,6 +19,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) =>
     bindActionCreators(
         {
             changeLayerVisibility: actions.visualizer.changeVisibility,
+            changeOrder: actions.visualizer.changeOrder,
         },
         dispatch,
     );
@@ -27,6 +28,7 @@ interface IVisualizerProps {
     layerOrder: string[];
     layers: { [K: string]: ILayer };
     changeLayerVisibility: typeof actions.visualizer.changeVisibility;
+    changeOrder: typeof actions.visualizer.changeOrder;
 }
 
 export class VisualizerInternal extends React.Component<IVisualizerProps> {
@@ -41,6 +43,7 @@ export class VisualizerInternal extends React.Component<IVisualizerProps> {
                         <Layers
                             layers={orderedLayers}
                             onVisibilityChanged={this.onLayerVisibilityChanged}
+                            onOrderChanged={this.onOrderChanged}
                         />
                     </Panel>
                     <Panel title="AI Controls" />
@@ -50,6 +53,10 @@ export class VisualizerInternal extends React.Component<IVisualizerProps> {
             </>
         );
     }
+
+    private onOrderChanged = (prevIndex: number, newIndex: number) => {
+        this.props.changeOrder(prevIndex, newIndex);
+    };
 
     private onLayerVisibilityChanged = (layer: ILayer) => {
         this.props.changeLayerVisibility(layer.topic, !layer.visible);

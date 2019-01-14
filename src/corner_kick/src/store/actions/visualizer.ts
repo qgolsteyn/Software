@@ -13,3 +13,14 @@ export const changeVisibility = createAction(
         return (topic: string, visibility: boolean) => resolve({ topic, visibility });
     },
 );
+
+/**
+ * Updates a layer's order
+ */
+export const changeOrder = createAction('visualizer/CHANGE_ORDER', (resolve) => {
+    return (prevIndex: number, newIndex: number) =>
+        resolve({
+            newIndex,
+            prevIndex,
+        });
+});

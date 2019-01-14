@@ -42,7 +42,7 @@ const defaultState = {
 
 export default (state: IVisualizerState = defaultState, action: VisualizerActions) => {
     switch (action.type) {
-        case getType(visualizer.changeVisibility):
+        case getType(visualizer.changeVisibility): {
             const { topic, visibility } = action.payload;
 
             return {
@@ -55,6 +55,23 @@ export default (state: IVisualizerState = defaultState, action: VisualizerAction
                     },
                 },
             };
+        }
+        case getType(visualizer.changeOrder): {
+            const { prevIndex, newIndex } = action.payload;
+
+            const layerOrder = new Array(...state.layerOrder);
+
+            const temp = layerOrder.splice(prevIndex, 1);
+
+            return {
+                ...state,
+                layerOrder: [
+                    ...layerOrder.slice(0, newIndex),
+                    temp,
+                    ...layerOrder.slice(newIndex),
+                ],
+            };
+        }
         default:
             return state;
     }

@@ -44,6 +44,7 @@
         "react-custom-scrollbars": "^4.2.1",
         "react-dom": "^16.6.3",
         "react-redux": "^6.0.0",
+        "react-reorder": "^3.0.0-alpha.7",
         "redux": "^4.0.1",
         "redux-saga": "^0.16.2",
         "roslib": "^0.20.0",
