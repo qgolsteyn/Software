@@ -16,11 +16,7 @@ const LayerItem = styled.div`
     font-size: 12px;
     color: ${(props) => props.theme.colors.subdued};
 
-    cursor: pointer;
-
-    &.dragged {
-        background: ${(props) => props.theme.colors.selected};
-    }
+    cursor: move;
 
     & .material-icons {
         padding: 4px;
@@ -33,13 +29,13 @@ const LayerItem = styled.div`
         transition: 0.2s all;
     }
 
-    & .material-icons:hover {
-        background: ${(props) => props.theme.colors.bg};
-    }
-
-    &:not(.placeholder):hover {
+    &:hover {
         background: ${(props) => props.theme.colors.selected};
         color: ${(props) => props.theme.colors.fg};
+    }
+
+    & .material-icons:hover {
+        background: ${(props) => props.theme.colors.bg};
     }
 
     &.visible .material-icons {
@@ -48,6 +44,16 @@ const LayerItem = styled.div`
 
     &.hidden .material-icons {
         color: ${(props) => props.theme.colors.subdued};
+    }
+
+    &.dragged {
+        color: ${(props) => props.theme.colors.fg};
+        background: ${(props) => props.theme.colors.selected};
+    }
+
+    &.placeholder {
+        background: none;
+        cursor: none;
     }
 `;
 
