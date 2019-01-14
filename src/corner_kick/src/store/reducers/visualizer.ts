@@ -10,30 +10,151 @@ import * as visualizer from '../actions/visualizer';
 
 export type VisualizerActions = ActionType<typeof visualizer>;
 
-const defaultState = {
+const defaultState: IVisualizerState = {
     layerOrder: ['friendly_robots', 'enemy_robots', 'ball', 'field'],
     layers: {
         ball: {
             name: 'Ball',
-            shapes: [],
+            shapes: [
+                {
+                    data: [6.3, 4.8, 0.06],
+                    fill: 'orange',
+                    type: 'circle',
+                },
+            ],
             topic: 'ball',
             visible: true,
         },
         enemy_robots: {
             name: 'Enemy Robots',
-            shapes: [],
+            shapes: [
+                {
+                    data: [6, 3, 0.24],
+                    fill: 'blue',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [2, 3.8, 0.24],
+                    fill: 'blue',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [11.5, 4.8, 0.24],
+                    fill: 'blue',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [9, 8.8, 0.24],
+                    fill: 'blue',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [6, 6.8, 0.24],
+                    fill: 'blue',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+            ],
             topic: 'enemy_robots',
-            visible: false,
+            visible: true,
         },
         field: {
             name: 'Field',
-            shapes: [],
+            shapes: [
+                {
+                    data: [6.3, 4.8, 0.5, 0.5],
+                    stroke: 'white',
+                    strokeWidth: 0.01,
+                    type: 'circle',
+                },
+                {
+                    data: [6.3, 0.3, 6.3, 9.3],
+                    stroke: 'white',
+                    strokeWidth: 0.01,
+                    type: 'line',
+                },
+                {
+                    data: [0.1, 4.2, 0.2, 1.2],
+                    stroke: 'white',
+                    strokeWidth: 0.01,
+                    type: 'rect',
+                },
+                {
+                    data: [12.3, 4.2, 0.2, 1.2],
+                    stroke: 'white',
+                    strokeWidth: 0.01,
+                    type: 'rect',
+                },
+                {
+                    data: [0.3, 3.6, 1.2, 2.4],
+                    stroke: 'white',
+                    strokeWidth: 0.01,
+                    type: 'rect',
+                },
+                {
+                    data: [11.1, 3.6, 1.2, 2.4],
+                    stroke: 'white',
+                    strokeWidth: 0.01,
+                    type: 'rect',
+                },
+                {
+                    data: [0.3, 0.3, 12, 9],
+                    stroke: 'white',
+                    strokeWidth: 0.01,
+                    type: 'rect',
+                },
+            ],
             topic: 'field',
             visible: true,
         },
         friendly_robots: {
             name: 'Friendly Robots',
-            shapes: [],
+            shapes: [
+                {
+                    data: [2, 3.3, 0.24],
+                    fill: 'red',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [2.5, 6.3, 0.24],
+                    fill: 'red',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [0.5, 4.3, 0.24],
+                    fill: 'red',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [10.5, 7.3, 0.24],
+                    fill: 'red',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+                {
+                    data: [6.5, 8.3, 0.24],
+                    fill: 'red',
+                    stroke: 'white',
+                    strokeWidth: 0.03,
+                    type: 'circle',
+                },
+            ],
             topic: 'friendly_robots',
             visible: true,
         },

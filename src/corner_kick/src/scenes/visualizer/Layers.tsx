@@ -26,6 +26,8 @@ const LayerItem = styled.div`
 
         font-size: 14px;
 
+        cursor: pointer;
+
         transition: 0.2s all;
     }
 

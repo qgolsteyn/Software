@@ -2,13 +2,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { Portal } from 'SRC/components/Portal';
 import { SidebarPanels } from 'SRC/components/SidebarPanels';
 import { Panel } from 'SRC/components/SidebarPanels/Panel';
 import { ILayer, IRootState } from 'SRC/types';
 
 import { actions, RootAction } from 'SRC/store';
 import { Layers } from './Layers';
+import { View } from './View';
 
 const mapStateToProps = (state: IRootState) => ({
     layerOrder: state.visualizer.layerOrder,
@@ -49,7 +49,7 @@ export class VisualizerInternal extends React.Component<IVisualizerProps> {
                     <Panel title="AI Controls" />
                     <Panel title="Game Status" disabled={true} />
                 </SidebarPanels>
-                <Portal to="main">This is the visualizer</Portal>
+                <View layers={orderedLayers} />
             </>
         );
     }

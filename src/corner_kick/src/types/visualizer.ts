@@ -13,7 +13,7 @@ export interface ILayerMessage {
 export interface IShape {
     type: 'rect' | 'circle' | 'line' | 'poly' | 'arc';
     data: number[];
-    fill: string;
-    stroke: string[];
-    strokeWidth: string[];
+    fill?: string;
+    stroke?: string;
+    strokeWidth?: number;
 }
