@@ -29,39 +29,42 @@ export const View = (props: ILayersProps) => {
                 viewBox={[0, 0, 12.6, 9.6].join(' ')}
                 xmlns="http://www.w3.org/2000/svg"
             >
-                {layers.reverse().map((layer) => {
-                    if (layer.visible) {
-                        return layer.shapes.reverse().map((shape, index) => {
-                            switch (shape.type) {
-                                case 'circle':
-                                    return (
-                                        <Circle
-                                            key={`${layer.topic}${index}`}
-                                            shape={shape}
-                                        />
-                                    );
-                                case 'rect':
-                                    return (
-                                        <Rect
-                                            key={`${layer.topic}${index}`}
-                                            shape={shape}
-                                        />
-                                    );
-                                case 'line':
-                                    return (
-                                        <Line
-                                            key={`${layer.topic}${index}`}
-                                            shape={shape}
-                                        />
-                                    );
-                                default:
-                                    return null;
-                            }
-                        });
-                    } else {
-                        return null;
-                    }
-                })}
+                {layers
+                    .slice(0)
+                    .reverse()
+                    .map((layer) => {
+                        if (layer.visible) {
+                            return layer.shapes.reverse().map((shape, index) => {
+                                switch (shape.type) {
+                                    case 'circle':
+                                        return (
+                                            <Circle
+                                                key={`${layer.topic}${index}`}
+                                                shape={shape}
+                                            />
+                                        );
+                                    case 'rect':
+                                        return (
+                                            <Rect
+                                                key={`${layer.topic}${index}`}
+                                                shape={shape}
+                                            />
+                                        );
+                                    case 'line':
+                                        return (
+                                            <Line
+                                                key={`${layer.topic}${index}`}
+                                                shape={shape}
+                                            />
+                                        );
+                                    default:
+                                        return null;
+                                }
+                            });
+                        } else {
+                            return null;
+                        }
+                    })}
             </Wrapper>
         </Portal>
     );
