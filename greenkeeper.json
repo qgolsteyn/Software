@@ -1,0 +1,9 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "src/corner_kick/package.json"
+      ]
+    }
+  }
+}
