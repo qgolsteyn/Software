@@ -11,14 +11,8 @@ export const Arc = (props: IArcProps) => {
     const cy = data[1];
     const r = data[2];
 
-    let thetaStart = data[3] % (2 * Math.PI);
-    let thetaEnd = data[4] % (2 * Math.PI);
-
-    if (thetaStart > thetaEnd) {
-        const temp = thetaEnd;
-        thetaEnd = thetaStart;
-        thetaStart = temp;
-    }
+    const thetaStart = data[3] % (2 * Math.PI);
+    const thetaEnd = data[4] % (2 * Math.PI);
 
     const xStart = cx + r * Math.cos(thetaStart);
     const yStart = cy + r * Math.sin(thetaStart);
