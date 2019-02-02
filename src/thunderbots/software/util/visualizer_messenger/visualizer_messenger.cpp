@@ -13,43 +13,42 @@ namespace Util
 
     void VisualizerMessenger::testShapes()
     {
-        if (!this)
-            return;
+        const auto vm = VisualizerMessenger::getInstance();
 
         // Helper function
-        auto drawAllShapes = [](DrawStyle style, DrawTransform transform, offset = 100)
+        auto drawAllShapes = [vm](DrawStyle style, DrawTransform transform, double offset = 100)
         {
             // Circle test
-            this->drawEllipse("test", 100, offset, 50, 50, style, transform);
+            vm->drawEllipse("test", 100, offset, 50, 50, style, transform);
 
             // Ellipse test
-            this->drawEllipse("test", 200, offset, 50, 50, style, transform);
+            vm->drawEllipse("test", 200, offset, 50, 50, style, transform);
 
             // Square test
-            this->drawRect("test", 300, offset, 50, 50, style, transform);
+            vm->drawRect("test", 300, offset, 50, 50, style, transform);
 
             // Rectangle test
-            this->drawRect("test", 400, offset, 20, 80, style, transform);
+            vm->drawRect("test", 400, offset, 20, 80, style, transform);
 
             // TODO: polygon test
 
             // Arc standard test (about half pi clockwise)
-            this->drawArc("test", 500, offset, 50, 0, 1.5, style, transform);
+            vm->drawArc("test", 500, offset, 50, 0, 1.5, style, transform);
 
             // Arc test (> pi)
-            this->drawArc("test", 600, offset, 50, 0, 3, style, transform);
+            vm->drawArc("test", 600, offset, 50, 0, 3, style, transform);
 
             // Arc test (> 2pi; should expect angle mod'd)
-            this->drawArc("test", 700, offset, 50, 0, 4, style, transform);
+            vm->drawArc("test", 700, offset, 50, 0, 4, style, transform);
 
             // Arc test (negative starting angle, about half pi ccw)
-            this->drawArc("test", 800, offset, 50, -1.5, 0, style, transform);
+            vm->drawArc("test", 800, offset, 50, -1.5, 0, style, transform);
 
             // Arc test (negative starting angle and > 2 pi)
-            this->drawArc("test", 900, offset, 50, -4, 5, style, transform);
+            vm->drawArc("test", 900, offset, 50, -4, 5, style, transform);
             
             // Line test
-            this->drawLine("test", 1000, offset, 150, 250, style, transform);
+            vm->drawLine("test", 1000, offset, 150, 250, style, transform);
         };
 
         // Try different styles and transform
