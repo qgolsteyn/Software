@@ -16,8 +16,8 @@ namespace Util
         const auto vm = VisualizerMessenger::getInstance();
 
         // Helper function
-        auto drawAllShapes = [vm](DrawStyle style, DrawTransform transform, double offset = 100)
-        {
+        auto drawAllShapes = [vm](DrawStyle style, DrawTransform transform,
+                                  double offset = 100) {
             // Circle test
             vm->drawEllipse("test", 100, offset, 50, 50, style, transform);
 
@@ -46,7 +46,7 @@ namespace Util
 
             // Arc test (negative starting angle and > 2 pi)
             vm->drawArc("test", 900, offset, 50, -4, 5, style, transform);
-            
+
             // Line test
             vm->drawLine("test", 1000, offset, 150, 250, style, transform);
         };
@@ -54,24 +54,24 @@ namespace Util
         // Try different styles and transform
         DrawStyle standard_style = DrawStyle();
 
-        DrawStyle no_stroke_style = DrawStyle();
+        DrawStyle no_stroke_style     = DrawStyle();
         no_stroke_style.stroke_weight = 0;
 
-        DrawStyle patriot_style = DrawStyle();
-        patriot_style.fill = "blue";
-        patriot_style.stroke = "red";
+        DrawStyle patriot_style     = DrawStyle();
+        patriot_style.fill          = "blue";
+        patriot_style.stroke        = "red";
         patriot_style.stroke_weight = 5;
 
         DrawTransform standard_trans = DrawTransform();
 
         DrawTransform enlarged_trans = DrawTransform();
-        enlarged_trans.scale = 1.5;
+        enlarged_trans.scale         = 1.5;
 
         DrawTransform shrunk_trans = DrawTransform();
-        shrunk_trans.scale = 0.75;
+        shrunk_trans.scale         = 0.75;
 
         DrawTransform rotated_trans = DrawTransform();
-        rotated_trans.rotation = 0.52; /* ~60 deg */
+        rotated_trans.rotation      = 0.52; /* ~60 deg */
 
         drawAllShapes(standard_style, standard_trans, 100);
         drawAllShapes(standard_style, enlarged_trans, 200);
