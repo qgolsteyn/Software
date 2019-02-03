@@ -1,8 +1,5 @@
 - type: parallel
   name: example_parallel_step
   steps:
-    - service: codeship_example
-      command: printenv
-    - service: codeship_example
-      # shell wrapper not required unless passing along env vars or combining commands
-      command: /bin/bash -c 'ls && echo ${CI_BUILD_ID}'
+    - service: ubuntu:18.04
+      command: ./environment_setup/setup_software.sh melodic

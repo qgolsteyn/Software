@@ -1,6 +1,4 @@
-codeship_example:
+ubuntu:18.04:
   build:
-    image: codeship_example
+    image: ubuntu:18.04
     dockerfile: Dockerfile
-  environment:
-    EXAMPLE_ENV_VAR: example-var
