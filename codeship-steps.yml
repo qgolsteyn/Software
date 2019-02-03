@@ -1,5 +1,0 @@
-- type: parallel
-  name: example_parallel_step
-  steps:
-    - service: ubuntu1804
-      command: /bin/bash -c './environment_setup/setup_software.sh melodic'
