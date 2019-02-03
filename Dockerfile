@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM moveit/moveit:melodic-ci
 
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
