@@ -2,4 +2,4 @@
   name: example_parallel_step
   steps:
     - service: ubuntu1804
-      command: /bin/bash -c './environment_setup/setup_software.sh melodic'
+      command: /bin/bash -c 'apt-get install -y sudo && ./environment_setup/setup_software.sh melodic'
