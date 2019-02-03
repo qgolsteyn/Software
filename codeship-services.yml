@@ -1,4 +1,4 @@
 ubuntu:18.04:
   build:
-    image: ubuntu:18.04
+    image: ubuntu1804
     dockerfile: Dockerfile
