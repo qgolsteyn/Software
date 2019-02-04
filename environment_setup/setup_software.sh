@@ -157,7 +157,7 @@ elif [ "$ros_distro" == "melodic" ]; then
         echo "##############################################################"
         exit 1
     fi
-    sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
+    sudo apt-get install -y python-rosinstall python-rosinstall-generator python-wstool build-essential
 fi
 
 
