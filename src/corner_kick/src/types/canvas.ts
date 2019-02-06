@@ -9,7 +9,7 @@ export interface ILayerMessage {
     /**
      * Name of the layer
      */
-    name: string;
+    layer_name: string;
 
     /**
      * Shapes associated with the layer

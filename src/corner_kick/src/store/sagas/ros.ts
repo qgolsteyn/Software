@@ -68,12 +68,14 @@ export function subscribeToROSTopic(
     name: string,
     messageType: string,
     callback: (message: ROSLIB.Message) => void,
+    throttle_rate?: number,
 ) {
     if (ros !== null) {
         const topic = new ROSLIB.Topic({
             messageType,
             name,
             ros,
+            throttle_rate,
         });
 
         topic.subscribe(callback);

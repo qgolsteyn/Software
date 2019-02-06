@@ -31,7 +31,7 @@ stories.add('with rects', () => {
     // Some of the parameters of this fixture can be changed by the user
     const fixture = [
         {
-            name: 'Rect',
+            layer_name: 'Rect',
             shapes: [
                 {
                     data: [

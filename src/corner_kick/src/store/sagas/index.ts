@@ -7,6 +7,7 @@
 
 import { spawn } from 'redux-saga/effects';
 
+import initCanvas from './canvas';
 import initConsole from './console';
 import initROS from './ros';
 
@@ -16,4 +17,5 @@ import initROS from './ros';
 export function* init() {
     yield spawn(initROS);
     yield spawn(initConsole);
+    yield spawn(initCanvas);
 }

@@ -27,7 +27,7 @@ export const Layer = (props: ILayerProps) => {
     const shapesElements = props.layer.shapes.map((shape, index) => {
         switch (shape.type) {
             case 'rect':
-                return <Rect key={`${props.layer.name}${index}`} shape={shape} />;
+                return <Rect key={`${props.layer.layer_name}${index}`} shape={shape} />;
             default:
                 return null;
         }

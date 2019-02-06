@@ -3,4 +3,9 @@
  */
 
 export { theme } from './theme';
-export { TOPIC_ROSOUT, TOPIC_ROSOUT_TYPE } from './topics';
+export {
+    TOPIC_LAYERS,
+    TOPIC_LAYERS_TYPE,
+    TOPIC_ROSOUT,
+    TOPIC_ROSOUT_TYPE,
+} from './topics';
