@@ -7,12 +7,12 @@ import { put, spawn, take, takeLatest } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
 import { TOPIC_LAYERS, TOPIC_LAYERS_TYPE } from 'SRC/constants';
-import { ILayer, ILayerMessage, IShape } from 'SRC/types';
+import { ILayerMessage, IShape } from 'SRC/types';
 
 import { actions } from '../actions';
 import { subscribeToROSTopic } from './ros';
 
-const layers: { [name: string]: ILayer } = {};
+const layers: { [name: string]: IShape[] } = {};
 const canvasChannel = channel();
 
 export default function* init() {
@@ -44,20 +44,13 @@ function onNewLayerMessage(message: ILayerMessage) {
     const { layer_name, shapes } = message;
 
     if (layers[layer_name] === undefined) {
-        layers[layer_name] = {
-            layer_name,
-            shapes,
-            visible: false,
-        };
+        layers[layer_name] = shapes;
 
-        canvasChannel.put(actions.canvas.updateLayers(layers));
-    } else if (shouldUpdateCanvas(layers[layer_name].shapes, shapes)) {
-        layers[layer_name] = {
-            ...layers[layer_name],
-            shapes,
-        };
+        canvasChannel.put(actions.canvas.updateLayerShapes(layer_name, shapes));
+    } else if (shouldUpdateCanvas(layers[layer_name], shapes)) {
+        layers[layer_name] = shapes;
 
-        canvasChannel.put(actions.canvas.updateLayers(layers));
+        canvasChannel.put(actions.canvas.updateLayerShapes(layer_name, shapes));
     }
 }
 

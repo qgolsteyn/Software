@@ -7,11 +7,11 @@
 
 import { createAction } from 'typesafe-actions';
 
-import { ILayer } from 'SRC/types';
+import { IShape } from 'SRC/types';
 
 /**
  * Sent when a new message is received from a particular topic
  */
-export const updateLayers = createAction('canvas_UPDATE_LAYERS', (resolve) => {
-    return (layers: { [key: string]: ILayer }) => resolve({ layers });
+export const updateLayerShapes = createAction('canvas_UPDATE_LAYERS', (resolve) => {
+    return (name: string, shapes: IShape[]) => resolve({ name, shapes });
 });

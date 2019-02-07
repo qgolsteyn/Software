@@ -1,4 +1,4 @@
-import { ILayer } from './canvas';
+import { IShape } from './canvas';
 import { IRosoutMessage } from './standardROSMessages';
 
 /*
@@ -15,7 +15,7 @@ export interface IRootState {
 }
 
 export interface ICanvasState {
-    layers: { [key: string]: ILayer };
+    layers: { [key: string]: IShape[] };
 }
 
 /**

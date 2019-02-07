@@ -8,37 +8,24 @@ import { ICanvasState } from 'SRC/types';
 import { actions } from '../../actions';
 import canvasReducer from '../canvas';
 
-const mockLayers = {
-    ball: {
-        layer_name: 'ball',
-        shapes: [],
-        visible: true,
+const mockShapes = [
+    {
+        data: [1, 1, 1, 1],
+        fill: 'test',
+        stroke: 'test',
+        stroke_weight: 0.1,
+        type: 'rect',
     },
-    enemy: {
-        layer_name: 'enemy',
-        shapes: [],
-        visible: false,
-    },
-    field: {
-        layer_name: 'field',
-        shapes: [],
-        visible: true,
-    },
-    friendly: {
-        layer_name: 'friendly',
-        shapes: [],
-        visible: true,
-    },
-};
+];
 
 describe('console reducer', () => {
     describe('when we receive action ros_NEW_MESSAGE', () => {
         it('should push messages to the state', () => {
-            const mockAction = actions.canvas.updateLayers(mockLayers);
+            const mockAction = actions.canvas.updateLayerShapes('test', mockShapes);
 
             const state = canvasReducer(undefined, mockAction);
 
-            expect(state.layers).toEqual(mockLayers);
+            expect(state.layers['test']).toEqual(mockShapes);
         });
     });
     describe('when we receive other actions', () => {
@@ -48,7 +35,9 @@ describe('console reducer', () => {
                 type: 'test_ACTION',
             };
             const mockState: ICanvasState = {
-                layers: mockLayers,
+                layers: {
+                    test: mockShapes,
+                },
             };
 
             const state = canvasReducer(mockState, mockAction as any);

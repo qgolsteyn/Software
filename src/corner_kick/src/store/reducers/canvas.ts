@@ -20,11 +20,16 @@ const defaultState: ICanvasState = {
 export default (state: ICanvasState = defaultState, action: CanvasAction) => {
     switch (action.type) {
         // Push messages to state if subscribed to /rosout
-        case getType(canvas.updateLayers):
+        case getType(canvas.updateLayerShapes): {
+            const { name, shapes } = action.payload;
             return {
                 ...state,
-                layers: action.payload.layers,
+                layers: {
+                    ...state.layers,
+                    [name]: shapes,
+                },
             };
+        }
         default:
             return state;
     }

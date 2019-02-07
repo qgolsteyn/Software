@@ -10,28 +10,15 @@ import * as canvasActions from '../canvas';
 const mockStore = configureMockStore();
 const store = mockStore();
 
-const mockLayers = {
-    ball: {
-        layer_name: 'ball',
-        shapes: [],
-        visible: true,
+const mockShapes = [
+    {
+        data: [1, 1, 1, 1],
+        fill: 'test',
+        stroke: 'test',
+        stroke_weight: 0.1,
+        type: 'rect',
     },
-    enemy: {
-        layer_name: 'enemy',
-        shapes: [],
-        visible: false,
-    },
-    field: {
-        layer_name: 'field',
-        shapes: [],
-        visible: true,
-    },
-    friendly: {
-        layer_name: 'friendly',
-        shapes: [],
-        visible: true,
-    },
-};
+];
 
 describe('canvasActions', () => {
     beforeEach(() => {
@@ -44,13 +31,14 @@ describe('canvasActions', () => {
                 {
                     meta: undefined,
                     payload: {
-                        layers: mockLayers,
+                        name: 'test',
+                        shapes: mockShapes,
                     },
-                    type: 'console_NEW_ROSOUT',
+                    type: 'canvas_UPDATE_LAYERS',
                 },
             ];
 
-            store.dispatch(canvasActions.updateLayers(mockLayers));
+            store.dispatch(canvasActions.updateLayerShapes('test', mockShapes));
             expect(store.getActions()).toEqual(expectedActions);
         });
     });
