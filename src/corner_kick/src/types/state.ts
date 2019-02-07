@@ -16,6 +16,8 @@ export interface IRootState {
 
 export interface ICanvasState {
     layers: { [key: string]: IShape[] };
+    layerVisibility: { [key: string]: boolean };
+    layerOrder: string[];
 }
 
 /**

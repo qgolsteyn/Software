@@ -34,7 +34,7 @@ describe('canvasActions', () => {
                         name: 'test',
                         shapes: mockShapes,
                     },
-                    type: 'canvas_UPDATE_LAYERS',
+                    type: 'canvas_UPDATE_LAYER',
                 },
             ];
 

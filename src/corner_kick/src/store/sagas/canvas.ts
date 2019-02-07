@@ -46,7 +46,7 @@ function onNewLayerMessage(message: ILayerMessage) {
     if (layers[layer_name] === undefined) {
         layers[layer_name] = shapes;
 
-        canvasChannel.put(actions.canvas.updateLayerShapes(layer_name, shapes));
+        canvasChannel.put(actions.canvas.addLayer(layer_name, shapes));
     } else if (shouldUpdateCanvas(layers[layer_name], shapes)) {
         layers[layer_name] = shapes;
 
