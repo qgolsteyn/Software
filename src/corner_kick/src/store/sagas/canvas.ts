@@ -49,11 +49,15 @@ function onNewLayerMessage(message: ILayerMessage) {
             shapes,
             visible: false,
         };
+
+        canvasChannel.put(actions.canvas.updateLayers(layers));
     } else if (shouldUpdateCanvas(layers[layer_name].shapes, shapes)) {
         layers[layer_name] = {
             ...layers[layer_name],
             shapes,
         };
+
+        canvasChannel.put(actions.canvas.updateLayers(layers));
     }
 }
 

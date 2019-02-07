@@ -1,3 +1,4 @@
+import { ILayer } from './canvas';
 import { IRosoutMessage } from './standardROSMessages';
 
 /*
@@ -9,6 +10,12 @@ import { IRosoutMessage } from './standardROSMessages';
  */
 export interface IRootState {
     ros: IROSState;
+    console: IMessagesState;
+    canvas: ICanvasState;
+}
+
+export interface ICanvasState {
+    layers: { [key: string]: ILayer };
 }
 
 /**
