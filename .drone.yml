@@ -12,4 +12,5 @@ steps:
       ROS_DISTRO: "melodic"
     commands:
       - apt-get update && apt-get install sudo -y
+      - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5523BAEEB01FA116
       - /bin/bash -c "./travis_ci.sh"
