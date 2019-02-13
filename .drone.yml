@@ -11,6 +11,7 @@ steps:
       RUN_COVERAGE: "true"
       ROS_DISTRO: "melodic"
     commands:
-      - apt-get update && apt-get install sudo -y
+      - apt-get update && apt-get install sudo gnupg2 -y
       - sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5523BAEEB01FA116
+      - apt-get update
       - /bin/bash -c "./travis_ci.sh"
