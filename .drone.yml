@@ -11,5 +11,5 @@ steps:
       RUN_COVERAGE: "true"
       ROS_DISTRO: "melodic"
     commands:
-      - apt-get install sudo -y
+      - apt-get update && apt-get install sudo -y
       - /bin/bash -c "./travis_ci.sh"
