@@ -157,7 +157,7 @@ elif [ "$ros_distro" == "melodic" ]; then
         echo "##############################################################"
         exit 1
     fi
-    sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential
+    sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential -y
 fi
 
 
@@ -271,7 +271,7 @@ if [ "$ros_distro" == "kinetic" ]; then
 elif [ "$ros_distro" == "melodic" ]; then
     # Ubuntu 18.04 and later ship with cmake versions >= 3.8.2,
     # so we can just install from the default PPA
-    sudo apt-get install cmake
+    sudo apt-get install cmake -y
 fi
 
 
