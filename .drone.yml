@@ -3,7 +3,7 @@ name: default
 
 steps:
   - name: test
-    image: ubuntu:18.04
+    image: phusion/baseimage
     pull: always
     environment:
       RUN_BUILD: "true"
