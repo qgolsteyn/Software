@@ -3,11 +3,12 @@ name: default
 
 steps:
   - name: test
-    image: ubuntu:18.04
+    image: moveit/moveit:melodic-ci
     pull: always
     environment:
       RUN_BUILD: "true"
       RUN_TESTS: "true"
       RUN_COVERAGE: "true"
+      ROS_DISTRO: "melodic"
     commands:
       - /bin/bash -c "./travis_ci.sh"
