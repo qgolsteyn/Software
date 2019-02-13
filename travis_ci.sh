@@ -11,9 +11,6 @@
 # The current directory
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# This variable is used to let us show nice folds in travis
-export TRAVIS_FOLD_COUNTER=1
-
 # Figure out what flags we should be passing to `cmake`
 CMAKE_FLAGS=""
 if [ "$RUN_COVERAGE" == "true" ]; then
@@ -24,18 +21,6 @@ if [ "$RUN_COVERAGE" == "true" ]; then
                 -DCMAKE_CXX_OUTPUT_EXTENSION_REPLACE=1"
 fi
 
-# Display command in Travis console and fold output in dropdown section
-function travis_run() {
-  local command=$@
-
-  echo -e "\e[0Ktravis_fold:start:command$TRAVIS_FOLD_COUNTER \e[34m$ $command\e[0m"
-  # actually run command
-  eval ${command} || exit 1 # kill build if error
-  echo -e -n "\e[0Ktravis_fold:end:command$TRAVIS_FOLD_COUNTER\e[0m"
-
-  let "TRAVIS_FOLD_COUNTER += 1"
-}
-
 
 # Change to the directory this script is in
 cd $CURR_DIR
@@ -45,24 +30,26 @@ if [ "$RUN_BUILD" == "true" ] || \
     [ "$RUN_TESTS" == "true" ] || \
     [ "$RUN_COVERAGE" == "true" ]; then
     # Install all required dependecies
-    travis_run ./environment_setup/setup_software.sh $ROS_DISTRO 
+    ./environment_setup/setup_software.sh $ROS_DISTRO 
+
+    source /opt/ros/melodic/setup.bash
 
     # Build the codebase
-    travis_run catkin_make ${CMAKE_FLAGS}
+    catkin_make ${CMAKE_FLAGS}
 fi
 
 # Note that we must run tests to get coverage
 if [ "$RUN_TESTS" == "true" ] || \
     [ "$RUN_COVERAGE" == "true" ]; then
     # Run tests for AI
-    travis_run catkin_make run_tests ${CMAKE_FLAGS}
+    catkin_make run_tests ${CMAKE_FLAGS}
 
     # Run tests for Corner Kick
-    travis_run ./src/corner_kick/scripts/start_test.sh
+    ./src/corner_kick/scripts/start_test.sh
 
     # Report the results of the tests
     # (which tests failed and why)
-    travis_run catkin_test_results --verbose
+    catkin_test_results --verbose
 fi
 
 # We need to run tests in order to get coverage
