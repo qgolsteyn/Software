@@ -3,7 +3,7 @@ name: default
 
 steps:
   - name: test
-    image: moveit/moveit:melodic-ci
+    image: ubuntu:18.04
     pull: always
     environment:
       RUN_BUILD: "true"
