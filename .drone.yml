@@ -1,0 +1,12 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: test
+    image: moveit/moveit:melodic-ci
+    environment:
+      RUN_BUILD: "true"
+      RUN_TESTS: "true"
+      RUN_COVERAGE: "true"
+    commands:
+      - /bin/bash -c "./travis_ci.sh"
