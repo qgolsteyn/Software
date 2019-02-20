@@ -10,6 +10,7 @@
         "jsx": "react",
         "moduleResolution": "node",
         "rootDirs": ["src", "storybook"],
+        "typeRoots": ["node_modules/@types", "typings"],
         "forceConsistentCasingInFileNames": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
@@ -18,7 +19,8 @@
         "suppressImplicitAnyIndexErrors": true,
         "noUnusedLocals": true,
         "paths": {
-            "SRC/*": ["src/*"]
+            "SRC/*": ["src/*"],
+            "./*.worker": ["worker"]
         },
         "allowSyntheticDefaultImports": true
     },

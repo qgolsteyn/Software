@@ -5,11 +5,9 @@ import { channel } from 'redux-saga';
 import { put, spawn, take, takeLatest } from 'redux-saga/effects';
 import { getType } from 'typesafe-actions';
 
-import { TOPIC_ROSOUT, TOPIC_ROSOUT_TYPE } from 'SRC/constants';
-import { IRosoutMessage } from 'SRC/types';
+import { actions } from 'SRC/store/actions';
 
-import { actions } from '../actions';
-import { subscribeToROSTopic } from './ros';
+import Worker from 'worker-loader!./worker';
 
 const consoleChannel = channel();
 
@@ -35,7 +33,8 @@ function* listenToConsoleChannel() {
  * We subscribe to topic rosout to start receiving messages
  */
 function startConsole() {
-    subscribeToROSTopic(TOPIC_ROSOUT, TOPIC_ROSOUT_TYPE, (message: IRosoutMessage) => {
-        consoleChannel.put(actions.console.newRosoutMessage(message));
+    const worker = new Worker();
+    worker.addEventListener('message', (message) => {
+        consoleChannel.put(actions.console.newRosoutMessage(message.data));
     });
 }
