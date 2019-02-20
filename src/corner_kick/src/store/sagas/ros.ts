@@ -4,12 +4,13 @@
 
 import { channel } from 'redux-saga';
 import { put, spawn, take, takeLatest } from 'redux-saga/effects';
-import ROSLIB from 'roslib';
 import { getType } from 'typesafe-actions';
+
+import { ROS } from 'SRC/utils/ros';
 
 import { connected, disconnected, error, start } from '../actions/ros';
 
-let ros: ROSLIB.Ros | null = null;
+const ros: ROS = new ROS();
 const rosChannel = channel();
 
 /**
@@ -42,8 +43,7 @@ function* listenToROSChannel() {
 function* startROS() {
     yield stopROS();
 
-    ros = new ROSLIB.Ros({});
-    ros.connect('ws://localhost:9090');
+    ros.connect();
 
     // Send Redux actions when connected, disconnected to ROS or on error
     ros.on('connection', () => rosChannel.put(connected()));
@@ -54,47 +54,6 @@ function* startROS() {
 /**
  * Disconnect from ROS if we are connected
  */
-function* stopROS() {
-    if (ros !== null) {
-        yield ros.close();
-        ros = null;
-    }
-}
-
-/**
- * Subscribe to a ROS topic and send messages to the callback
- */
-export function subscribeToROSTopic(
-    name: string,
-    messageType: string,
-    callback: (message: ROSLIB.Message) => void,
-) {
-    if (ros !== null) {
-        const topic = new ROSLIB.Topic({
-            messageType,
-            name,
-            ros,
-        });
-
-        topic.subscribe(callback);
-    }
-}
-
-/**
- * Unsubscribe from a ROS topic
- */
-export function unsubscribeToROSTopic(
-    name: string,
-    messageType: string,
-    callback: (message: ROSLIB.Message) => void,
-) {
-    if (ros !== null) {
-        const topic = new ROSLIB.Topic({
-            messageType,
-            name,
-            ros,
-        });
-
-        topic.unsubscribe(callback);
-    }
+function stopROS() {
+    ros.disconnect();
 }
