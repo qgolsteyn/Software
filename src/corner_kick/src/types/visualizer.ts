@@ -5,7 +5,7 @@
 /**
  * Represents a layer message received from ROS
  */
-export interface ILayerMessage {
+export interface ILayer {
     /**
      * Name of the layer
      */
@@ -14,17 +14,25 @@ export interface ILayerMessage {
     /**
      * Shapes associated with the layer
      */
-    shapes: IShape[];
+    sprite: ISprite;
+
+    topic: {
+        name: string;
+        messageType: string;
+    };
+
+    parseInfo: {
+        count: number | ((message: any) => number);
+
+        x?: number | ((message: any, index: number) => number);
+        y?: number | ((message: any, index: number) => number);
+    };
 }
 
-/**
- * Used by the visualizer to add additional properties to the visualizer
- */
-export interface ILayer extends ILayerMessage {
-    /**
-     * Specifies if the layer is visible in the Canvas
-     */
-    visible: boolean;
+export interface ISprite {
+    width: number;
+    height: number;
+    shapes: Array<IRectShape | ICircleShape>;
 }
 
 /**
@@ -35,11 +43,6 @@ export interface IShape {
      * Specifies the type of shape to display
      */
     type: string;
-
-    /**
-     * The data associated with the shape
-     */
-    data: number[];
 
     /**
      * The fill color of the shape
@@ -55,4 +58,19 @@ export interface IShape {
      * The stroke weight of the shape
      */
     stroke_weight?: number;
+}
+
+export interface IRectShape extends IShape {
+    type: 'rect';
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
+
+export interface ICircleShape extends IShape {
+    type: 'circle';
+    cx: number;
+    cy: number;
+    r: number;
 }

@@ -20,7 +20,8 @@
         "noUnusedLocals": true,
         "paths": {
             "SRC/*": ["src/*"],
-            "./*.worker": ["worker"]
+            "./*.worker": ["worker"],
+            "node-pixi": ["pixi.js"]
         },
         "allowSyntheticDefaultImports": true
     },

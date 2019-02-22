@@ -21,7 +21,10 @@ export const App = () => (
         <Theme>
             <Portal portalLocation={PortalLocation.SIDEBAR}>This is the sidebar</Portal>
             <Portal portalLocation={PortalLocation.MAIN}>
-                <Canvas topicName="visualizer/layers" topicMessageType="" />
+                <Canvas
+                    topicName="visualizer/layers"
+                    topicMessageType="thunderbots_msgs/DrawLayer"
+                />
             </Portal>
             <Portal portalLocation={PortalLocation.CONSOLE}>This is the console</Portal>
         </Theme>
