@@ -19,8 +19,7 @@
         "suppressImplicitAnyIndexErrors": true,
         "noUnusedLocals": true,
         "paths": {
-            "SRC/*": ["src/*"],
-            "./*.worker": ["worker"]
+            "SRC/*": ["src/*"]
         },
         "allowSyntheticDefaultImports": true
     },
