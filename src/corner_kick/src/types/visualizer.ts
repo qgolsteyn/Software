@@ -2,47 +2,35 @@
  * This file describes the datatypes used for the visualizer
  */
 
-/**
- * Represents a layer message received from ROS
- */
 export interface ILayer {
-    /**
-     * Name of the layer
-     */
-    name: string;
+    layer_name: string;
+    shapes: IShape[];
+}
 
-    /**
-     * Shapes associated with the layer
-     */
-    sprite: ISprite;
-
-    topic: {
-        name: string;
-        messageType: string;
-    };
-
-    parseInfo: {
-        count: number | ((message: any) => number);
-
-        x?: number | ((message: any, index: number) => number);
-        y?: number | ((message: any, index: number) => number);
+export interface ISpritesheet {
+    frames: { [key: string]: IFrame };
+    sourceSize: {
+        h: number;
+        w: number;
     };
 }
 
-export interface ISprite {
-    width: number;
-    height: number;
-    shapes: Array<IRectShape | ICircleShape>;
+export interface IFrame {
+    frame: { x: number; y: number; w: number; h: number };
+    sourceSize: { w: number; h: number };
+    shapes: IShape[];
 }
 
-/**
- * Represents a shape in the visualizer
- */
 export interface IShape {
     /**
      * Specifies the type of shape to display
      */
     type: string;
+
+    /**
+     * The data associated with the shape
+     */
+    data: number[];
 
     /**
      * The fill color of the shape
@@ -58,19 +46,4 @@ export interface IShape {
      * The stroke weight of the shape
      */
     stroke_weight?: number;
-}
-
-export interface IRectShape extends IShape {
-    type: 'rect';
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-}
-
-export interface ICircleShape extends IShape {
-    type: 'circle';
-    cx: number;
-    cy: number;
-    r: number;
 }

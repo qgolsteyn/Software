@@ -21,6 +21,26 @@
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
             rel="stylesheet"
         />
+
+        <style>
+            body {
+                margin: 0;
+            }
+
+            #loading {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                background: #0a0e14;
+            }
+        </style>
     </head>
 
     <body>
@@ -151,6 +171,9 @@
                     overflow: hidden;
                 "
             ></div>
+        </div>
+        <div id="loading">
+            <img src="./assets/logo.svg" width="64px" height="64px" />
         </div>
     </body>
 </html>

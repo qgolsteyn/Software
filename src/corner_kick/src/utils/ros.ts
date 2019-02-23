@@ -26,10 +26,11 @@ export class ROS {
         throttle_rate?: number,
     ) {
         const topic = new Topic({
+            compression: 'cbor',
             messageType,
             name,
-            throttle_rate,
             ros: this.ros,
+            throttle_rate,
         });
 
         topic.subscribe(callback);
