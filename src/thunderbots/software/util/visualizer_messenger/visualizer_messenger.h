@@ -16,6 +16,14 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <thread>
+#include <mutex>
+#include <vector>
+
+#include <boost/beast/core.hpp>
+#include <boost/beast/websocket.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/io_service.hpp>
 
 #include "thunderbots_msgs/DrawLayer.h"
 #include "thunderbots_msgs/DrawShape.h"
@@ -32,9 +40,9 @@ namespace ros
 
 namespace Util
 {
-    using LayerMsg    = thunderbots_msgs::DrawLayer;
+    using ShapeMsg    = std::vector<int32_t>;
+    using LayerMsg    = std::vector<ShapeMsg>;
     using LayerMsgMap = std::map<std::string, LayerMsg>;
-    using ShapeMsg    = thunderbots_msgs::DrawShape;
     using time_point  = std::chrono::time_point<std::chrono::system_clock>;
     using Point2D     = thunderbots_msgs::Point2D;
 
@@ -63,9 +71,9 @@ namespace Util
          */
         typedef struct DrawTransform
         {
-            DrawTransform() : rotation(0.0), scale(1.0) {}
+            DrawTransform() : rotation(0), scale(1.0) {}
 
-            double rotation;
+            int rotation;
             double scale;
         } DrawTransform;
 
@@ -78,11 +86,11 @@ namespace Util
         static std::shared_ptr<VisualizerMessenger> getInstance();
 
         /**
-         * Initialize publisher for the visualizer
+         * Initialize websocket for the visualizer
          *
          * @param node_handle: The ROS node handle to create the message publisher
          */
-        void initializePublisher(ros::NodeHandle node_handle);
+        void initializeWebsocket();
 
         /**
          * Get a constant reference of the map of existing layers
@@ -105,21 +113,21 @@ namespace Util
         void clearLayers();
 
         // Drawing methods
-        /**
-         * Request a message to draw a ellipse shape. The origin is the center of the
-         * circle.
-         *
-         * @param layer: The layer name this shape is being drawn to
-         * @param cx: Ellipse's center X
-         * @param cy: Ellipse's center Y
-         * @param r1: Ellipse's horizontal radius
-         * @param r2: Ellipse's vertical radius
-         * @param draw_style: the drawing style of the shape
-         * @param draw_transform: the transformation of the shape
-         */
-        void drawEllipse(const std::string& layer, double cx, double cy, double r1,
-                         double r2, DrawStyle draw_style = DrawStyle(),
-                         DrawTransform draw_transform = DrawTransform());
+        ///**
+        // * Request a message to draw a ellipse shape. The origin is the center of the
+        // * circle.
+        // *
+        // * @param layer: The layer name this shape is being drawn to
+        // * @param cx: Ellipse's center X
+        // * @param cy: Ellipse's center Y
+        // * @param r1: Ellipse's horizontal radius
+        // * @param r2: Ellipse's vertical radius
+        // * @param draw_style: the drawing style of the shape
+        // * @param draw_transform: the transformation of the shape
+        // */
+        //void drawEllipse(const std::string& layer, double cx, double cy, double r1,
+        //                 double r2, DrawStyle draw_style = DrawStyle(),
+        //                 DrawTransform draw_transform = DrawTransform());
 
         /**
          * Request a message to draw a rectangle shape. The rectangle has origin on the
@@ -137,60 +145,60 @@ namespace Util
                       DrawStyle draw_style         = DrawStyle(),
                       DrawTransform draw_transform = DrawTransform());
 
-        /**
-         * Request a message to draw a polygon shape. The origin is the
-         * first vertex passed in.
-         *
-         * @param layer: The layer name this shape is being drawn to
-         * @param vertices: A vector of Point2Ds that specifies x and y of vertices
-         * @param draw_style: the drawing style of the shape
-         * @param draw_transform: the transformation of the shape
-         */
-        void drawPoly(const std::string& layer, std::vector<Point2D>& vertices,
-                      DrawStyle draw_style         = DrawStyle(),
-                      DrawTransform draw_transform = DrawTransform());
+        ///**
+        // * Request a message to draw a polygon shape. The origin is the
+        // * first vertex passed in.
+        // *
+        // * @param layer: The layer name this shape is being drawn to
+        // * @param vertices: A vector of Point2Ds that specifies x and y of vertices
+        // * @param draw_style: the drawing style of the shape
+        // * @param draw_transform: the transformation of the shape
+        // */
+        //void drawPoly(const std::string& layer, std::vector<Point2D>& vertices,
+        //              DrawStyle draw_style         = DrawStyle(),
+        //              DrawTransform draw_transform = DrawTransform());
 
-        /**
-         * Request a message to draw an arc. The origin is the center point
-         *
-         * @param layer: The layer name this shape is being drawn to
-         * @param cx: Arc's center point X
-         * @param cy: Arc's center point Y
-         * @param radius: Arc's radius
-         * @param theta_start: The starting angle of the arc in rad (where 0 is pointed to
-         * +X horizontal heading, and PI/2 is south)
-         * @param theta_end: The ending angle of the arc in rad
-         * @param draw_style: the drawing style of the shape
-         * @param draw_transform: the transformation of the shape
-         */
-        void drawArc(const std::string& layer, double cx, double cy, double radius,
-                     double theta_start, double theta_end,
-                     DrawStyle draw_style         = DrawStyle(),
-                     DrawTransform draw_transform = DrawTransform());
+        ///**
+        // * Request a message to draw an arc. The origin is the center point
+        // *
+        // * @param layer: The layer name this shape is being drawn to
+        // * @param cx: Arc's center point X
+        // * @param cy: Arc's center point Y
+        // * @param radius: Arc's radius
+        // * @param theta_start: The starting angle of the arc in rad (where 0 is pointed to
+        // * +X horizontal heading, and PI/2 is south)
+        // * @param theta_end: The ending angle of the arc in rad
+        // * @param draw_style: the drawing style of the shape
+        // * @param draw_transform: the transformation of the shape
+        // */
+        //void drawArc(const std::string& layer, double cx, double cy, double radius,
+        //             double theta_start, double theta_end,
+        //             DrawStyle draw_style         = DrawStyle(),
+        //             DrawTransform draw_transform = DrawTransform());
 
-        /**
-         * Request a message to draw a line. The origin is the first point
-         *
-         * @param layer: The layer name this shape is being drawn to
-         * @param x1: Starting point X
-         * @param y1: Starting point Y
-         * @param x2: Ending point X
-         * @param y2: Ending point Y
-         * @param draw_style: the drawing style of the shape
-         * @param draw_transform: the transformation of the shape
-         */
-        void drawLine(const std::string& layer, double x1, double y1, double x2,
-                      double y2, DrawStyle draw_style = DrawStyle(),
-                      DrawTransform draw_transform = DrawTransform());
+        ///**
+        // * Request a message to draw a line. The origin is the first point
+        // *
+        // * @param layer: The layer name this shape is being drawn to
+        // * @param x1: Starting point X
+        // * @param y1: Starting point Y
+        // * @param x2: Ending point X
+        // * @param y2: Ending point Y
+        // * @param draw_style: the drawing style of the shape
+        // * @param draw_transform: the transformation of the shape
+        // */
+        //void drawLine(const std::string& layer, double x1, double y1, double x2,
+        //              double y2, DrawStyle draw_style = DrawStyle(),
+        //              DrawTransform draw_transform = DrawTransform());
 
        private:
         /**
          * Constructor; initializes an empty layers map then populates it
          */
         explicit VisualizerMessenger()
-            : layers_name_to_msg_map(), publisher(), time_last_published()
+            : layers_name_to_msg_map(), time_last_published()
         {
-            buildLayers();
+            websocket_connection_thread = std::thread([this](){ return watchForConnections(); });
         }
 
         /**
@@ -223,12 +231,13 @@ namespace Util
          * @param layer: The name of the layer to push to
          * @param shape: The shape message
          */
-        void addShapeToLayer(const std::string& layer, ShapeMsg& shape);
+        void addShapeToLayer(const std::string& layer, std::vector<int32_t>& shape);
 
-       private:
+        // TODO: javadoc comment
+        void watchForConnections();
+
         // string to LayerMsg map
         LayerMsgMap layers_name_to_msg_map;
-        ros::Publisher publisher;
 
         // Period in nanoseconds
         const double DESIRED_PERIOD_MS =
@@ -236,6 +245,15 @@ namespace Util
 
         // Time point
         time_point time_last_published;
+
+        // Thread on which we watch for websocket connections
+        std::thread websocket_connection_thread;
+
+        // Mutex on the list of current websocket connections
+        std::mutex current_websocket_connections_mutex;
+
+        // All the current websocket connections we have
+        std::vector<boost::beast::websocket::stream<boost::asio::ip::tcp::socket>> current_websocket_connections;
     };
 
 }  // namespace Util

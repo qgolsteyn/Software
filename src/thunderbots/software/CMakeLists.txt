@@ -196,6 +196,15 @@ target_link_libraries(visualizer_websocket_test
         ${Boost_LIBRARIES}
         )
 
+add_executable(visualizer_messenger_test
+        visualizer_messenger_test.cpp
+        util/visualizer_messenger/visualizer_messenger.cpp
+        )
+target_link_libraries(visualizer_messenger_test
+        ${G3LOG}
+        ${Boost_LIBRARIES}
+        )
+
 ##### LIBUSB #####
 pkg_search_module("LIBUSB_1" REQUIRED "libusb-1.0")
 include_directories(SYSTEM "${LIBUSB_1_INCLUDE_DIRS}")

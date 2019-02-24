@@ -52,14 +52,9 @@ do_session(tcp::socket& socket)
         for(;;)
         {
             // Spam messages
-            boost::beast::multi_buffer buffer;
+            std::vector<int32_t> const contents = {1, 2, 3, 4};
 
-            std::vector<int> const contents = {1, 2, 3, 4};
-
-            size_t n = boost::asio::buffer_copy(buffer.prepare(contents.size()), boost::asio::buffer(contents));
-            buffer.commit(n);
-
-            ws.write(buffer.data());
+            ws.write(boost::asio::buffer(contents));
 
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
