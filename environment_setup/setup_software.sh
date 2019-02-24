@@ -193,6 +193,10 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 60 \
                          --slave /usr/bin/g++ g++ /usr/bin/g++-7 
 sudo update-alternatives --config gcc
 
+echo "================================================================"
+echo "Installing g3log"
+echo "================================================================"
+
 # Clone, build, and install g3log. Adapted from instructions at:
 # https://github.com/KjellKod/g3log
 g3log_path="/tmp/g3log"
@@ -208,6 +212,25 @@ cd build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 sudo make install
+cd $CURR_DIR
+
+echo "================================================================"
+echo "Installing beast"
+echo "================================================================"
+
+beast_path="/tmp/beast"
+if [ -d $beast_path ]; then
+    echo "Removing old beast..."
+    sudo rm -r $beast_path 
+fi
+mkdir $beast_path
+cd $beast_path
+
+wget https://github.com/boostorg/beast/archive/v124.zip
+unzip v124.zip
+cd beast-124
+# Note that we use `\cp` here instead of `cp` to force overwrite without prompt
+sudo \cp -r include/boost /usr/include
 cd $CURR_DIR
 
 # Done
