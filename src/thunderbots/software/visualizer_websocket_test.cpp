@@ -28,6 +28,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <chrono>
 
 using tcp = boost::asio::ip::tcp;               // from <boost/asio/ip/tcp.hpp>
 namespace websocket = boost::beast::websocket;  // from <boost/beast/websocket.hpp>
@@ -48,15 +49,30 @@ do_session(tcp::socket& socket)
 
         for(;;)
         {
-            // This buffer will hold the incoming message
+            // Spam messages
             boost::beast::multi_buffer buffer;
 
-            // Read a message
-            ws.read(buffer);
+            std::vector<int> const contents = {1, 2, 3, 4};
 
-            // Echo the message back
-            ws.text(ws.got_text());
+            size_t n = boost::asio::buffer_copy(buffer.prepare(contents.size()), boost::asio::buffer(contents));
+            buffer.commit(n);
+
             ws.write(buffer.data());
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+
+            //// This buffer will hold the incoming message
+            //boost::beast::multi_buffer buffer;
+
+            //// Read a message
+            //ws.read(buffer);
+
+            //buffer = {1, 2, 3, 4};
+
+            //// Echo the message back
+            //ws.text(ws.got_text());
+            //ws.write(buffer.data());
         }
     }
     catch(boost::system::system_error const& se)
@@ -86,11 +102,11 @@ int main(int argc, char* argv[])
                 "    websocket-server-sync 0.0.0.0 8080\n";
             return EXIT_FAILURE;
         }
-        auto const address = boost::asio::ip::make_address(argv[1]);
+        auto const address = boost::asio::ip::address::from_string(argv[1]);
         auto const port = static_cast<unsigned short>(std::atoi(argv[2]));
 
         // The io_context is required for all I/O
-        boost::asio::io_context ioc{1};
+        boost::asio::io_service ioc{1};
 
         // The acceptor receives incoming connections
         tcp::acceptor acceptor{ioc, {address, port}};
