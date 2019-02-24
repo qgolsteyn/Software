@@ -189,6 +189,13 @@ add_executable (radio_communication
 # This way the message headers are always generated before they are used in compilation here.
 add_dependencies(radio_communication ${catkin_EXPORTED_TARGETS})
 
+add_executable(visualizer_websocket_test
+        visualizer_websocket_test.cpp
+        )
+target_link_libraries(visualizer_websocket_test
+        ${Boost_LIBRARIES}
+        )
+
 ##### LIBUSB #####
 pkg_search_module("LIBUSB_1" REQUIRED "libusb-1.0")
 include_directories(SYSTEM "${LIBUSB_1_INCLUDE_DIRS}")
