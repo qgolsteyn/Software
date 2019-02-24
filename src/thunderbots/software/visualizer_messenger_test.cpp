@@ -86,5 +86,7 @@ int main(){
         //drawAllShapes(0, 900, patriot_style, enlarged_trans);
         //drawAllShapes(0, 1000, patriot_style, shrunk_trans);
         //drawAllShapes(0, 1100, patriot_style, rotated_trans);
+
+        vm->publishAndClearLayers();
     }
 }
