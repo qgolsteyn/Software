@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     Util::Logger::LoggerSingleton::initializeLogger(node_handle);
 
     // Initialize the draw visualizer messenger
-    Util::VisualizerMessenger::getInstance()->initializePublisher(node_handle);
+    Util::VisualizerMessenger::getInstance()->initializeWebsocket(node_handle);
 
     int count = 30;
 

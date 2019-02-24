@@ -39,8 +39,12 @@ async function generateSpritesheet() {
 function processWebsocket() {
     const ws = new WebSocket('ws://localhost:9091');
     ws.binaryType = 'arraybuffer';
+    ws.addEventListener('open', () => {
+        console.log('connected');
+    });
     ws.addEventListener('message', (message) => {
         const array = new Int32Array(message.data);
+        console.log(array);
         array.forEach((value, index) => {
             sharedBuffer[index] = value;
         });
