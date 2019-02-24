@@ -104,6 +104,8 @@ int main(int argc, char **argv)
     // Initialize the draw visualizer messenger
     Util::VisualizerMessenger::getInstance()->initializePublisher(node_handle);
 
+    int count = 30;
+
     // Main loop
     while (ros::ok())
     {
@@ -132,6 +134,19 @@ int main(int argc, char **argv)
                 LOG(INFO) << msg << std::endl;
             }
             primitive_publisher.publish(primitive_array_message);
+
+            for (int i = 0; i < 100; i++)
+            {
+                Util::VisualizerMessenger::getInstance()->drawRect(
+                    "test", (double)(i % 100) * (count / 10),
+                    (double)(i / 100) * (count / 10), (double)2, (double)2);
+            }
+
+            count++;
+            if (count > 100)
+            {
+                count = 30;
+            }
 
             // On every tick, send the layer messages
             Util::VisualizerMessenger::getInstance()->publishAndClearLayers();

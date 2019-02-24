@@ -15,13 +15,15 @@ function main() {
     ctx.addEventListener('message', (ev) => handleMessage(ev.data));
 
     generateSpritesheet();
+
+    processWebsocket();
 }
 
 function handleMessage(action: Action) {
     switch (action.type) {
         case getType(actions.sendSharedBuffer):
             sharedBuffer = new Int32Array(action.payload.sharedBuffer);
-            requestAnimationFrame(generateShapes);
+            processWebsocket();
             return;
     }
 }
@@ -34,32 +36,15 @@ async function generateSpritesheet() {
     ]);
 }
 
-function generateShapes(time: number) {
-    let i = 0;
-    for (; i < 94 * 54; i++) {
-        sharedBuffer[9 * i] = 2;
-        sharedBuffer[9 * i + 1] = Math.floor(i % 94) * 10;
-        sharedBuffer[9 * i + 2] = Math.floor(i / 94) * 10;
-        sharedBuffer[9 * i + 3] = 11;
-        sharedBuffer[9 * i + 4] = 11;
-        sharedBuffer[9 * i + 5] = 0;
-        sharedBuffer[9 * i + 6] =
-            ((((i / 100) * 0xff) % 0xff) + (((time / 5000) * 0xff) % 0xff)) % 0xff;
-        sharedBuffer[9 * i + 7] =
-            0xff -
-            (((((i / 100) * 0xff) % 0xff) + (((time / 5000) * 0xff) % 0xff)) % 0xff);
-        sharedBuffer[9 * i + 8] = 0;
-    }
-    sharedBuffer[9 * i] = 2;
-    sharedBuffer[9 * i + 1] = 0;
-    sharedBuffer[9 * i + 2] = 0;
-    sharedBuffer[9 * i + 3] = 4;
-    sharedBuffer[9 * i + 4] = 541;
-    sharedBuffer[9 * i + 5] = 0;
-    sharedBuffer[9 * i + 6] = 0xff;
-    sharedBuffer[9 * i + 7] = 0xff;
-    sharedBuffer[9 * i + 8] = 0xff;
-    requestAnimationFrame(generateShapes);
+function processWebsocket() {
+    const ws = new WebSocket('ws://localhost:9091');
+    ws.binaryType = 'arraybuffer';
+    ws.addEventListener('message', (message) => {
+        const array = new Int32Array(message.data);
+        array.forEach((value, index) => {
+            sharedBuffer[index] = value;
+        });
+    });
 }
 
 main();

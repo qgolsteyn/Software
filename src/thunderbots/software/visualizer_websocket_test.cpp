@@ -20,68 +20,77 @@
 //
 //------------------------------------------------------------------------------
 
+#include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
-#include <boost/asio/ip/tcp.hpp>
+#include <chrono>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
 #include <string>
 #include <thread>
-#include <chrono>
 
-using tcp = boost::asio::ip::tcp;               // from <boost/asio/ip/tcp.hpp>
+using tcp           = boost::asio::ip::tcp;     // from <boost/asio/ip/tcp.hpp>
 namespace websocket = boost::beast::websocket;  // from <boost/beast/websocket.hpp>
 
 //------------------------------------------------------------------------------
 
 // Echoes back all received WebSocket messages
-void
-do_session(tcp::socket& socket)
+void do_session(tcp::socket& socket)
 {
     try
     {
         // Construct the stream by moving in the socket
         websocket::stream<tcp::socket> ws{std::move(socket)};
 
+        ws.binary(true);
+
         // Accept the websocket handshake
         ws.accept();
 
-        for(;;)
+        for (int j = 0;; j++)
         {
-            // Spam messages
-            boost::beast::multi_buffer buffer;
+            std::vector<int32_t> contents;
+            contents.reserve(1000 * 9);
 
-            std::vector<int> const contents = {1, 2, 3, 4};
+            for (int i = 0; i < 1000; i++)
+            {
+                contents.emplace_back(2);
+                contents.emplace_back((int)(i % 100) * 10);
+                contents.emplace_back((int)(i / 100) * 10);
+                contents.emplace_back((int)(j % 11));
+                contents.emplace_back(11);
+                contents.emplace_back(0);
+                contents.emplace_back(0xFF);
+                contents.emplace_back(0xFF);
+                contents.emplace_back(0xFF);
+            }
 
-            size_t n = boost::asio::buffer_copy(buffer.prepare(contents.size()), boost::asio::buffer(contents));
-            buffer.commit(n);
+            ws.write(boost::asio::buffer(contents));
 
-            ws.write(buffer.data());
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(40));
 
 
             //// This buffer will hold the incoming message
-            //boost::beast::multi_buffer buffer;
+            // boost::beast::multi_buffer buffer;
 
             //// Read a message
-            //ws.read(buffer);
+            // ws.read(buffer);
 
-            //buffer = {1, 2, 3, 4};
+            // buffer = {1, 2, 3, 4};
 
             //// Echo the message back
-            //ws.text(ws.got_text());
-            //ws.write(buffer.data());
+            // ws.text(ws.got_text());
+            // ws.write(buffer.data());
         }
     }
-    catch(boost::system::system_error const& se)
+    catch (boost::system::system_error const& se)
     {
         // This indicates that the session was closed
-        if(se.code() != websocket::error::closed)
+        if (se.code() != websocket::error::closed)
             std::cerr << "Error: " << se.code().message() << std::endl;
     }
-    catch(std::exception const& e)
+    catch (std::exception const& e)
     {
         std::cerr << "Error: " << e.what() << std::endl;
     }
@@ -96,21 +105,20 @@ int main(int argc, char* argv[])
         // Check command line arguments.
         if (argc != 3)
         {
-            std::cerr <<
-                "Usage: websocket-server-sync <address> <port>\n" <<
-                "Example:\n" <<
-                "    websocket-server-sync 0.0.0.0 8080\n";
+            std::cerr << "Usage: websocket-server-sync <address> <port>\n"
+                      << "Example:\n"
+                      << "    websocket-server-sync 0.0.0.0 8080\n";
             return EXIT_FAILURE;
         }
         auto const address = boost::asio::ip::address::from_string(argv[1]);
-        auto const port = static_cast<unsigned short>(std::atoi(argv[2]));
+        auto const port    = static_cast<unsigned short>(std::atoi(argv[2]));
 
         // The io_context is required for all I/O
         boost::asio::io_service ioc{1};
 
         // The acceptor receives incoming connections
         tcp::acceptor acceptor{ioc, {address, port}};
-        for(;;)
+        for (;;)
         {
             // This will receive the new connection
             tcp::socket socket{ioc};
@@ -119,9 +127,7 @@ int main(int argc, char* argv[])
             acceptor.accept(socket);
 
             // Launch the session, transferring ownership of the socket
-            std::thread{std::bind(
-                &do_session,
-                std::move(socket))}.detach();
+            std::thread{std::bind(&do_session, std::move(socket))}.detach();
         }
     }
     catch (const std::exception& e)
@@ -130,4 +136,3 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 }
-
