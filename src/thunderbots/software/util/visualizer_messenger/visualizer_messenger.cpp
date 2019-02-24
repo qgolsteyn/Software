@@ -35,6 +35,8 @@ namespace Util
             // Block until we get a connection
             acceptor.accept(socket);
 
+            std::cout << "GOT A CONNECTION" << std::endl;
+
             // Lock the current list of sockets
             current_websocket_connections_mutex.lock();
 
@@ -43,6 +45,8 @@ namespace Util
 
             // Unlock the current list of sockets
             current_websocket_connections_mutex.unlock();
+
+            std::cout << "ADDED THE CONNECTION" << std::endl;
 
             // TODO: this is disgusting. We should not tie up all the cpu
             // Yield so that other things can run
@@ -69,6 +73,9 @@ namespace Util
 
     void VisualizerMessenger::publishAndClearLayers()
     {
+
+        std::cout << "PUBLISHING" << std::endl;
+
         // Limit rate of the message publishing
         // Get the time right now
         const time_point now     = std::chrono::system_clock::now();
