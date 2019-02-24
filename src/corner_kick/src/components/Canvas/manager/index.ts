@@ -1,7 +1,9 @@
 import * as PIXI from 'pixi.js';
+
+import Viewport from 'pixi-viewport';
 import { ActionType, getType } from 'typesafe-actions';
 
-import { IShape, ISpritesheet } from 'SRC/types/visualizer';
+import { ISpritesheet } from 'SRC/types/visualizer';
 import * as actions from '../actions';
 
 import Worker from 'worker-loader!../worker';
@@ -12,13 +14,19 @@ const SPRITE_POOL_COUNT = 10000;
 
 export class CanvasManager {
     public app: PIXI.Application;
+    public viewport: Viewport;
     public worker: Worker;
 
     public spritesheetTexture: PIXI.BaseTexture;
-    public spritesheetDictionary: { [key: string]: PIXI.Texture } = {};
+    public spritesheetDictionary: PIXI.Texture[];
 
     public spritePool: PIXI.Sprite[] = [];
     public spriteCount = 0;
+
+    public sharedBuffer = new SharedArrayBuffer(
+        Int32Array.BYTES_PER_ELEMENT * 9 * SPRITE_POOL_COUNT,
+    );
+    public shapeArray = new Int32Array(this.sharedBuffer);
 
     constructor() {
         this.initApp();
@@ -35,14 +43,12 @@ export class CanvasManager {
             case getType(actions.sendSpritesheet):
                 this.processSpritesheet(action.payload.spritesheet, action.payload.image);
                 break;
-            case getType(actions.sendShapes):
-                this.processShapes(action.payload.shapes);
-                break;
         }
     };
 
     public resizeCanvas = (width: number, height: number) => {
         this.app.renderer.resize(width, height);
+        this.viewport.resize(width, height, 1000, 1000);
     };
 
     private initApp = async () => {
@@ -50,6 +56,23 @@ export class CanvasManager {
             antialias: true,
             transparent: true,
         });
+
+        this.viewport = new Viewport({
+            screenHeight: 100,
+            screenWidth: 100,
+            worldHeight: 1000,
+            worldWidth: 1000,
+
+            interaction: this.app.renderer.plugins.interaction,
+        });
+
+        this.viewport
+            .drag()
+            .pinch()
+            .wheel()
+            .decelerate();
+
+        this.app.stage.addChild(this.viewport);
 
         this.app.renderer.autoResize = true;
     };
@@ -63,6 +86,7 @@ export class CanvasManager {
     private initWorker = async () => {
         this.worker = new Worker();
         this.worker.addEventListener('message', (ev) => this.handleAction(ev.data));
+        this.worker.postMessage(actions.sendSharedBuffer(this.sharedBuffer));
     };
 
     private processSpritesheet = (spritesheet: ISpritesheet, image: ImageBitmap) => {
@@ -75,61 +99,45 @@ export class CanvasManager {
 
         this.spritesheetTexture = PIXI.BaseTexture.from(canvas as HTMLCanvasElement);
 
-        Object.keys(spritesheet.frames).forEach((frameName) => {
-            const { frame } = spritesheet.frames[frameName];
-            this.spritesheetDictionary[frameName] = new PIXI.Texture(
+        this.spritesheetDictionary = spritesheet.frames.map((frame) => {
+            return new PIXI.Texture(
                 this.spritesheetTexture,
-                new PIXI.Rectangle(frame.x, frame.y, frame.w, frame.h),
+                new PIXI.Rectangle(
+                    frame.frame.x,
+                    frame.frame.y,
+                    frame.frame.w,
+                    frame.frame.h,
+                ),
             );
         });
 
-        const shapes: IShape[] = [];
-        for (let i = 0; i < 9999; i++) {
-            shapes.push({
-                data: [Math.floor(i % 100) * 3, Math.floor(i / 100) * 3, 2, 2],
-                type: 'rect',
-            });
-        }
-
-        const test = (time: number) => {
-            const count = (time % 2000) * 0.01 + 3;
-            for (let i = 0; i < 9999; i++) {
-                shapes[i].data[0] = Math.floor(i % 100) * count;
-                shapes[i].data[1] = Math.floor(i / 100) * count;
-            }
-
-            this.processShapes(shapes);
-            requestAnimationFrame(test);
-        };
-
-        requestAnimationFrame(test);
+        requestAnimationFrame(this.processShapes);
     };
 
-    private processShapes = (shapes: IShape[]) => {
-        const stage = this.app.stage;
-        const newCount = shapes.length;
-
+    private processShapes = () => {
         console.time('draw');
-        for (let i = 0; i < newCount || i < this.spriteCount; i++) {
-            if (i < newCount) {
-                if (i > this.spriteCount) {
-                    stage.addChild(this.spritePool[i]);
-                }
-
-                const shape = shapes[i];
-                const sprite = this.spritePool[i];
-
-                sprite.texture = this.spritesheetDictionary[shapes[i].type];
-                sprite.x = shape.data[0];
-                sprite.y = shape.data[1];
-                sprite.width = shape.data[2];
-                sprite.height = shape.data[3];
+        this.viewport.removeChildren();
+        for (let i = 0; i < SPRITE_POOL_COUNT; i++) {
+            if (this.shapeArray[9 * i] !== 0) {
+                this.spritePool[i].texture = this.spritesheetDictionary[
+                    this.shapeArray[9 * i] - 1
+                ];
+                this.spritePool[i].x = this.shapeArray[9 * i + 1];
+                this.spritePool[i].y = this.shapeArray[9 * i + 2];
+                this.spritePool[i].width = this.shapeArray[9 * i + 3];
+                this.spritePool[i].height = this.shapeArray[9 * i + 4];
+                this.spritePool[i].rotation =
+                    (this.shapeArray[9 * i + 5] / 180) * Math.PI;
+                this.spritePool[i].tint =
+                    (this.shapeArray[9 * i + 6] << 16) +
+                    (this.shapeArray[9 * i + 7] << 8) +
+                    this.shapeArray[9 * i + 8];
+                this.viewport.addChild(this.spritePool[i]);
             } else {
-                stage.removeChild(this.spritePool[i]);
+                break;
             }
         }
         console.timeEnd('draw');
-
-        this.spriteCount = newCount;
+        requestAnimationFrame(this.processShapes);
     };
 }

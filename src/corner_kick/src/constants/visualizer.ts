@@ -1,8 +1,8 @@
 import { ISpritesheet } from 'SRC/types/visualizer';
 
 export const SPRITESHEET: ISpritesheet = {
-    frames: {
-        circle: {
+    frames: [
+        {
             frame: {
                 h: 512,
                 w: 512,
@@ -21,7 +21,7 @@ export const SPRITESHEET: ISpritesheet = {
                 w: 512,
             },
         },
-        rect: {
+        {
             frame: {
                 h: 512,
                 w: 512,
@@ -40,7 +40,7 @@ export const SPRITESHEET: ISpritesheet = {
                 w: 512,
             },
         },
-    },
+    ],
     sourceSize: {
         h: 512,
         w: 1024,

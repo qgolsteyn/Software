@@ -8,7 +8,7 @@ export interface ILayer {
 }
 
 export interface ISpritesheet {
-    frames: { [key: string]: IFrame };
+    frames: IFrame[];
     sourceSize: {
         h: number;
         w: number;

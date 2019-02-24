@@ -7,7 +7,7 @@ export const renderSpritesheet = async (spritesheet: ISpritesheet) => {
     );
     const ctx = canvas.getContext('2d')!;
 
-    Object.values(spritesheet.frames).forEach((frame) => renderFrame(ctx, frame));
+    spritesheet.frames.forEach((frame) => renderFrame(ctx, frame));
 
     return await createImageBitmap(canvas as HTMLCanvasElement);
 };
