@@ -67,8 +67,9 @@ module.exports = {
     // Build for the web client, contains assumption about the base HTML file
     web: {
         ...generalWebpackBuild,
+        context: path.resolve(__dirname, '../src'),
         // Our project entry point.
-        entry: path.resolve(__dirname, '../src/index.ts'),
+        entry: './index.ts',
 
         // We generate a bundle in the build folder
         output: {
@@ -84,7 +85,7 @@ module.exports = {
         plugins: [
             // This plugins autogenerates our index.html files and links the javascript bundle.
             new HtmlWebPackPlugin({
-                template: './src/index.html',
+                template: './index.html',
                 filename: './index.html',
             }),
             // This plugin simplifies the webpack output and provides easy to read suggestions

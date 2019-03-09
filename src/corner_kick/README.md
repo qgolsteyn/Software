@@ -12,17 +12,18 @@ Corner Kick is a web app that allows for the visualization of UBC Thunderbots' A
 
 - [How to use](#how-to-use)
 - [Contribute](#contribute)
-    - [Running the dev server](#running-the-dev-server)
-    - [Testing](#testing)
-    - [Visual Testing](#visual-testing)
+  - [Running the dev server](#running-the-dev-server)
+  - [Debugging](#debugging)
+  - [Testing](#testing)
+  - [Visual Testing](#visual-testing)
 - [Project Structure](#project-structure)
 - [Design notes](#design-notes)
 - [Additional notes](#additional-notes)
-    - [Yarn](#yarn)
-    - [Approach to the application UI layout](#approach-to-the-application-ui-layout)
-    - [Approach to the application state](#approach-to-the-application-state)
-        - [Debugging the Redux store](#debugging-the-redux-store)
-        - [Reducer functions and Redux saga](#reducer-functions-and-redux-saga)
+  - [Yarn](#yarn)
+  - [Approach to the application UI layout](#approach-to-the-application-ui-layout)
+  - [Approach to the application state](#approach-to-the-application-state)
+    - [Debugging the Redux store](#debugging-the-redux-store)
+    - [Reducer functions and Redux saga](#reducer-functions-and-redux-saga)
 
 ## How to use
 
@@ -49,7 +50,11 @@ yarn
 yarn start
 ```
 
-A window should open with the application in development mode.
+You can view the application by visiting http://localhost:8080.
+
+### Debugging
+
+In VS Code, you can debug the application by clicking `Debug with Chrome` in the bottom bar of the IDE.
 
 ### Testing
 
