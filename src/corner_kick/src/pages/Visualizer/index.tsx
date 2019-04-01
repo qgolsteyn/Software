@@ -10,6 +10,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { LayersPanel } from 'SRC/components/LayersPanel';
 import { Portal, PortalLocation } from 'SRC/components/Portal';
+import { Panel, ResizeablePanels } from 'SRC/components/ResizeablePanels';
 import { SPRITESHEET } from 'SRC/constants';
 import { Canvas, CanvasManager, LayerReceiver } from 'SRC/containers/Canvas';
 import { actions, RootAction } from 'SRC/store';
@@ -66,10 +67,16 @@ class VisualizerInternal extends React.Component<IVisualizerProps> {
         return (
             <>
                 <Portal portalLocation={PortalLocation.SIDEBAR}>
-                    <LayersPanel
-                        layers={orderedLayers}
-                        toggleVisibility={this.onLayerVisibilityToggle}
-                    />
+                    <ResizeablePanels minPanelHeight={100} inactivePanelHeight={32}>
+                        <Panel title="Layers">
+                            <LayersPanel
+                                layers={orderedLayers}
+                                toggleVisibility={this.onLayerVisibilityToggle}
+                            />
+                        </Panel>
+                        <Panel title="Test 1">Test!</Panel>
+                        <Panel title="Test 2">Test!</Panel>
+                    </ResizeablePanels>
                 </Portal>
                 <Portal portalLocation={PortalLocation.MAIN}>
                     <Canvas canvasManager={this.canvasManager} />

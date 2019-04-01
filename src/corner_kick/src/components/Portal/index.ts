@@ -30,6 +30,7 @@ export enum PortalLocation {
     CONSOLE = 'console',
     FOOTER_RIGHT = 'footerRight',
     FOOTER_LEFT = 'footerLeft',
+    OVERLAY = 'overlay',
 }
 
 interface IPortalProps {

@@ -9,3 +9,5 @@ import { App } from './App';
 
 // Mount the React component App to the div `#react`
 ReactDom.render(React.createElement(App), document.getElementById('react'));
+
+document.getElementById('startScreen')!.remove();

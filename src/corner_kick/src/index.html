@@ -80,6 +80,7 @@
                         width: 100%;
                         padding: 12px;
                     "
+                    draggable="false"
                 />
             </div>
             <div
@@ -147,6 +148,33 @@
                     overflow: hidden;
                 "
             ></div>
+        </div>
+        <div
+            id="overlay"
+            style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            pointer-events: none;
+        "
+        >
+            <div
+                id="startScreen"
+                style="
+                width: 100%;
+                height: 100%;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: white;
+            "
+            >
+                <img src="./assets/logo.svg" width="120px" draggable="false" />
+            </div>
         </div>
     </body>
 </html>

@@ -12,7 +12,7 @@ import styled from 'SRC/utils/styled-components';
  */
 const EmptyWrapper = styled.div`
     width: 100%;
-    height: 100px;
+    height: 100%;
 
     display: flex;
     flex-flow: column nowrap;
