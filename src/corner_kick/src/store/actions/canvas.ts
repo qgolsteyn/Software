@@ -25,3 +25,10 @@ export const toggleLayerVisibility = createAction(
         return (id: number) => resolve({ id });
     },
 );
+
+/**
+ * Action to swap the position of two layers
+ */
+export const swapLayers = createAction('canvas_SWAP_LAYERS', (resolve) => {
+    return (id1: number, id2: number) => resolve({ id1, id2 });
+});

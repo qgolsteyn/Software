@@ -35,6 +35,7 @@ stories.add('with layers', () => (
                 },
             ]}
             toggleVisibility={(id) => alert(`Layer ${id} had its visibility toggled`)}
+            swapLayers={(id1, id2) => alert(`Layer ${id1} and ${id2} have been swapped`)}
         />
     </StorybookStage>
 ));
@@ -47,7 +48,10 @@ stories.add('with empty state', () => (
         <LayersPanel
             layers={[]}
             toggleVisibility={() => {
-                //
+                // Do nothing
+            }}
+            swapLayers={() => {
+                // Do nothing
             }}
         />
     </StorybookStage>

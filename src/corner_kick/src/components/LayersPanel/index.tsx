@@ -3,6 +3,7 @@
  */
 
 import * as React from 'react';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 
 import { ILayer } from 'SRC/types';
 import styled from 'SRC/utils/styled-components';
@@ -85,6 +86,11 @@ interface ILayersProps {
      * on a layer
      */
     toggleVisibility: (id: number) => void;
+
+    /**
+     * Callback that gets triggered when the layer order has been changed
+     */
+    swapLayers: (id1: number, id2: number) => void;
 }
 
 /**
@@ -92,36 +98,65 @@ interface ILayersProps {
  *
  * Supports an empty state
  */
-export const LayersPanel = (props: ILayersProps) => {
-    const { layers, toggleVisibility } = props;
+export class LayersPanel extends React.Component<ILayersProps> {
+    private SortableItem = SortableElement(({ value }: { value: ILayer }) => (
+        <LayerItem>
+            {value.id}
+            <LayerVisibilityToggle
+                visible={value.visible}
+                className="material-icons"
+                onClick={(e) => {
+                    this.props.toggleVisibility(value.id);
+                }}
+            >
+                {value.visible ? 'visibility' : 'visibility_off'}
+            </LayerVisibilityToggle>
+        </LayerItem>
+    ));
 
-    // If number of layers to display is 0, show a screen to indicate that there
-    // is no layers.
-    return (
-        <>
-            {layers.length > 0 ? (
-                layers.map((layer) => (
-                    <LayerItem key={layer.id}>
-                        {layer.id}
-                        <LayerVisibilityToggle
-                            visible={layer.visible}
-                            className="material-icons"
-                            onClick={(e) => {
-                                toggleVisibility(layer.id);
-                            }}
-                        >
-                            remove_red_eye
-                        </LayerVisibilityToggle>
-                    </LayerItem>
-                ))
-            ) : (
-                <EmptyWrapper>
-                    <EmptyWrapperIcon className="material-icons">
-                        layers_clear
-                    </EmptyWrapperIcon>
-                    No layers to display
-                </EmptyWrapper>
-            )}
-        </>
-    );
-};
+    private SortableList = SortableContainer(({ items }: { items: ILayer[] }) => {
+        return (
+            <ul>
+                {items.map((value, index) => (
+                    <this.SortableItem key={value.id} index={index} value={value} />
+                ))}
+            </ul>
+        );
+    });
+
+    public render() {
+        const { layers } = this.props;
+
+        // If number of layers to display is 0, show a screen to indicate that there
+        // is no layers.
+        return (
+            <>
+                {layers.length > 0 ? (
+                    <this.SortableList
+                        lockAxis="y"
+                        lockToContainerEdges={true}
+                        items={layers}
+                        onSortEnd={this.onSortEnd}
+                    />
+                ) : (
+                    <EmptyWrapper>
+                        <EmptyWrapperIcon className="material-icons">
+                            layers_clear
+                        </EmptyWrapperIcon>
+                        No layers to display
+                    </EmptyWrapper>
+                )}
+            </>
+        );
+    }
+
+    private onSortEnd = ({
+        oldIndex,
+        newIndex,
+    }: {
+        oldIndex: number;
+        newIndex: number;
+    }) => {
+        this.props.swapLayers(oldIndex, newIndex);
+    };
+}

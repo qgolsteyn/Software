@@ -2,6 +2,7 @@
  * This file specifies the Canvas reducer
  */
 
+import { arrayMove } from 'react-sortable-hoc';
 import { ActionType, getType } from 'typesafe-actions';
 
 import { ICanvasState } from 'SRC/types';
@@ -38,6 +39,14 @@ export default (state: ICanvasState = defaultState, action: CanvasAction) => {
                         visible: newVisibility,
                     },
                 },
+            };
+        // Here, we swap two layers as specified by the action
+        case getType(canvas.swapLayers):
+            const { layerOrder } = state;
+            const { id1, id2 } = action.payload;
+            return {
+                ...state,
+                layerOrder: arrayMove(layerOrder, id1, id2),
             };
         default:
             return state;

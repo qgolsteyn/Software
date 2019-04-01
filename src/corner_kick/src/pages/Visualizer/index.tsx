@@ -27,6 +27,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) =>
         {
             addLayer: actions.canvas.addLayer,
             toggleVisibility: actions.canvas.toggleLayerVisibility,
+            swapLayers: actions.canvas.swapLayers,
         },
         dispatch,
     );
@@ -34,6 +35,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootAction>) =>
 interface IVisualizerProps {
     addLayer: typeof actions.canvas.addLayer;
     toggleVisibility: typeof actions.canvas.toggleLayerVisibility;
+    swapLayers: typeof actions.canvas.swapLayers;
     layers: { [id: number]: ILayer };
     layerOrder: number[];
 }
@@ -68,7 +70,8 @@ class VisualizerInternal extends React.Component<IVisualizerProps> {
                 <Portal portalLocation={PortalLocation.SIDEBAR}>
                     <LayersPanel
                         layers={orderedLayers}
-                        toggleVisibility={this.onLayerVisibilityToggle}
+                        toggleVisibility={this.props.toggleVisibility}
+                        swapLayers={this.props.swapLayers}
                     />
                 </Portal>
                 <Portal portalLocation={PortalLocation.MAIN}>
@@ -86,23 +89,7 @@ class VisualizerInternal extends React.Component<IVisualizerProps> {
      * Called when we received layer data from the websocket
      */
     private onNewLayerData = (data: ArrayBuffer) => {
-        this.canvasManager.handleLayerMessage(data, this.onNewLayer);
-    };
-
-    /**
-     * Called when a new layer is received by the Canvas. We dispatch an action
-     * to update the rest of our UI accordingly.
-     */
-    private onNewLayer = (id: number) => {
-        this.props.addLayer(id);
-    };
-
-    /**
-     * Called when the visibility is toggled on a particular layer. We dispatch an action
-     * to update the rest of our UI accordingly.
-     */
-    private onLayerVisibilityToggle = (id: number) => {
-        this.props.toggleVisibility(id);
+        this.canvasManager.handleLayerMessage(data, this.props.addLayer);
     };
 }
 
