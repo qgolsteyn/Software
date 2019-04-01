@@ -28,7 +28,6 @@ export enum PortalLocation {
     SIDEBAR_CONTROL = 'sidebarControl',
     SIDEBAR_TITLE = 'sidebarTitle',
     CONSOLE = 'console',
-    MAIN_TITLE = 'mainTitle',
     FOOTER_RIGHT = 'footerRight',
     FOOTER_LEFT = 'footerLeft',
 }
